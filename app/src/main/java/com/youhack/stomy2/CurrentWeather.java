@@ -1,5 +1,9 @@
 package com.youhack.stomy2;
 
+import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.util.TimeZone;
+
 /**
  * Created by jslee on 15/8/10.
  */
@@ -11,6 +15,16 @@ public class CurrentWeather {
     private double mPrecipChance;
     private String mSummary;
 
+    public String getTimeZone() {
+        return mTimeZone;
+    }
+
+    public void setTimeZone(String timeZone) {
+        mTimeZone = timeZone;
+    }
+
+    private String mTimeZone;
+
     public String getIcon() {
         return mIcon;
     }
@@ -21,6 +35,15 @@ public class CurrentWeather {
 
     public long getTime() {
         return mTime;
+    }
+
+    public String getFormattedTime() {
+        SimpleDateFormat formatter = new SimpleDateFormat("h:mm a");
+        formatter.setTimeZone(TimeZone.getTimeZone(getTimeZone()));
+        Date dateTime = new Date(getTime() * 1000);
+        String timeString = formatter.format(dateTime);
+
+        return  timeString;
     }
 
     public void setTime(long time) {

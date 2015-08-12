@@ -30,7 +30,7 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        String apiKey = "2a8ce61e9b3047630ae0200720c08e8d";
+        String apiKey = "733c940092bde3f05063f4360f4346a4";
         double latitude = 37.8267;
         double longitude = -122.423;
         String forecastUrl = "https://api.forecast.io/forecast/" + apiKey + "/" + latitude + ","
@@ -80,7 +80,20 @@ public class MainActivity extends ActionBarActivity {
         String timezone = forecast.getString("timezone");
         Log.v(TAG, "From JSON: " + timezone);
 
-        return new CurrentWeather();
+        JSONObject currently = forecast.getJSONObject("currently");
+
+        CurrentWeather currentWeather = new CurrentWeather();
+        currentWeather.setHumidity(currently.getDouble("humidity"));
+        currentWeather.setTime(currently.getLong("time"));
+        currentWeather.setIcon(currently.getString("icon"));
+        currentWeather.setPrecipChance(currently.getDouble("precipProbability"));
+        currentWeather.setSummary(currently.getString("summary"));
+        currentWeather.setTemperature(currently.getDouble("temperature"));
+        currentWeather.setTimeZone(timezone);
+
+        Log.v(TAG, currentWeather.getFormattedTime());
+
+        return currentWeather;
     }
 
     private boolean isNetworkAvailable() {
