@@ -7,7 +7,9 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +39,8 @@ public class MainActivity extends ActionBarActivity {
     @InjectView(R.id.summaryLabel) TextView mSummaryLabel;
     @InjectView(R.id.iconImageView) ImageView mIconImageView;
     @InjectView(R.id.locationLabel) TextView mlocationLabel;
+    @InjectView(R.id.refreshImageView) ImageView mRefreshImageView;
+    @InjectView(R.id.progressBar) ProgressBar mProgressBar;
 
 
     @Override
@@ -46,13 +50,32 @@ public class MainActivity extends ActionBarActivity {
         //use ButterKnife quck inject View
         ButterKnife.inject(this);
 
+        mProgressBar.setVisibility(View.INVISIBLE);
+
+        final double latitude = 25.0488463;
+        final double longitude = 121.5617103;
+
+        mRefreshImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getForecast(latitude, longitude);
+            }
+        });
+
+        getForecast(latitude, longitude);
+
+        Log.d(TAG, "Main UI code is running!");
+    }
+
+    private void getForecast(double latitude, double longitude) {
         String apiKey = "733c940092bde3f05063f4360f4346a4";
-        double latitude = 25.0488463;
-        double longitude = 121.5617103;
+
         String forecastUrl = "https://api.forecast.io/forecast/" + apiKey + "/" + latitude + ","
                 + longitude;
 
         if(isNetworkAvailable()) {
+            toggleRefrash();
+
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
                     .url(forecastUrl)
@@ -62,11 +85,24 @@ public class MainActivity extends ActionBarActivity {
             call.enqueue(new Callback() {
                 @Override
                 public void onFailure(Request request, IOException e) {
-
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            toggleRefrash();
+                        }
+                    });
+                    alertUserAboutError();
                 }
 
                 @Override
                 public void onResponse(Response response) throws IOException {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            toggleRefrash();
+                        }
+                    });
+
                     try {
                         String jsonData = response.body().string();
                         Log.v(TAG, jsonData);
@@ -93,8 +129,18 @@ public class MainActivity extends ActionBarActivity {
         } else {
             Toast.makeText(this, getString(R.string.network_unavaliable_message), Toast.LENGTH_LONG).show();
         }
+    }
 
-        Log.d(TAG, "Main UI code is running!");
+    private void toggleRefrash() {
+        if(mProgressBar.getVisibility() == View.INVISIBLE) {
+            mProgressBar.setVisibility(View.VISIBLE);
+            mRefreshImageView.setVisibility(View.INVISIBLE);
+        }
+        else
+        {
+            mProgressBar.setVisibility(View.INVISIBLE);
+            mRefreshImageView.setVisibility(View.VISIBLE);
+        }
     }
 
     private void updateDisplay() {
