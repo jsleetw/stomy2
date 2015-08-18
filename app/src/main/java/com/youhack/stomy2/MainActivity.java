@@ -2,6 +2,8 @@ package com.youhack.stomy2;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -32,6 +34,9 @@ public class MainActivity extends ActionBarActivity {
     private String TAG = MainActivity.class.getSimpleName();
     private CurrentWeather mCurrentWeather;
 
+    private LocationManager mLocationManager;
+    private Location mlastLocation;
+
     @InjectView(R.id.timeLabel) TextView mTimeLabel;
     @InjectView(R.id.temperatureLabel) TextView mTemperatureLabel;
     @InjectView(R.id.humidityValue) TextView mHumidityValue;
@@ -52,8 +57,16 @@ public class MainActivity extends ActionBarActivity {
 
         mProgressBar.setVisibility(View.INVISIBLE);
 
-        final double latitude = 25.0488463;
-        final double longitude = 121.5617103;
+        getLocation();
+
+        final double latitude = 25.0257;
+        final double longitude = 121.5243;
+        /*
+        if(mlastLocation!=null) {
+            latitude = mlastLocation.getLatitude();
+            longitude = mlastLocation.getLongitude();
+        }
+        */
 
         mRefreshImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,6 +78,12 @@ public class MainActivity extends ActionBarActivity {
         getForecast(latitude, longitude);
 
         Log.d(TAG, "Main UI code is running!");
+    }
+
+    private void getLocation(){
+        mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        String provider = LocationManager.PASSIVE_PROVIDER;
+        mlastLocation = mLocationManager.getLastKnownLocation(provider);
     }
 
     private void getForecast(double latitude, double longitude) {
@@ -144,7 +163,11 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void updateDisplay() {
-        mTemperatureLabel.setText(mCurrentWeather.getTemperature() + "");
+        //fahrenheit to celsius
+        double tempF = (double) mCurrentWeather.getTemperature();
+        int tempC = (int) ((tempF-32)*5/9);
+
+        mTemperatureLabel.setText(tempC + "");
         mTimeLabel.setText("At " + mCurrentWeather.getFormattedTime() + " it will be");
         mHumidityValue.setText(mCurrentWeather.getHumidity() + "");
         mPrecipValue.setText(mCurrentWeather.getPrecipChance() + "%");
@@ -194,5 +217,6 @@ public class MainActivity extends ActionBarActivity {
         AlertDialogFragment dialog = new AlertDialogFragment();
         dialog.show(getFragmentManager(), "error_dialog");
     }
+
 
 }
