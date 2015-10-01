@@ -37,6 +37,9 @@ public class MainActivity extends ActionBarActivity {
     private LocationManager mLocationManager;
     private Location mlastLocation;
 
+    private double latitude = 25.0257;
+    private double longitude = 121.5243;
+
     @InjectView(R.id.timeLabel) TextView mTimeLabel;
     @InjectView(R.id.temperatureLabel) TextView mTemperatureLabel;
     @InjectView(R.id.humidityValue) TextView mHumidityValue;
@@ -59,14 +62,11 @@ public class MainActivity extends ActionBarActivity {
 
         getLocation();
 
-        final double latitude = 25.0257;
-        final double longitude = 121.5243;
-        /*
         if(mlastLocation!=null) {
             latitude = mlastLocation.getLatitude();
             longitude = mlastLocation.getLongitude();
         }
-        */
+
 
         mRefreshImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -203,7 +203,7 @@ public class MainActivity extends ActionBarActivity {
 
     private boolean isNetworkAvailable() {
         ConnectivityManager manager = (ConnectivityManager)
-                getSystemService(Context.CONNECTIVITY_SERVICE);
+        getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = manager.getActiveNetworkInfo();
         boolean isAvailable = false;
         if (networkInfo !=null && networkInfo.isConnected()) {
