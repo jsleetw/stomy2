@@ -1,10 +1,12 @@
-package com.youhack.stomy2;
+package com.youhack.stomy2.ui;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.os.Bundle;
+
+import com.youhack.stomy2.R;
 
 /**
  * Created by jslee on 15/8/6.

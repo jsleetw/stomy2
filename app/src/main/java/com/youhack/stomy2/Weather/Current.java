@@ -1,4 +1,6 @@
-package com.youhack.stomy2;
+package com.youhack.stomy2.weather;
+
+import com.youhack.stomy2.R;
 
 import java.util.Date;
 import java.text.SimpleDateFormat;
@@ -7,7 +9,7 @@ import java.util.TimeZone;
 /**
  * Created by jslee on 15/8/10.
  */
-public class CurrentWeather {
+public class Current {
     private String mIcon;
     private long mTime;
     private double mTemperature;
