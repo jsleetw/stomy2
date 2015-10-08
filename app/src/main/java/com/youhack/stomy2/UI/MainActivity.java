@@ -1,6 +1,7 @@
 package com.youhack.stomy2.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
@@ -34,6 +35,7 @@ import java.io.IOException;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -282,5 +284,9 @@ public class MainActivity extends ActionBarActivity {
         dialog.show(getFragmentManager(), "error_dialog");
     }
 
-
+    @OnClick (R.id.dailyButton)
+    public void startDailyActivity(View view) {
+        Intent intent = new Intent(this, DailyForecastActive.class);
+        startActivity(intent);
+    }
 }
