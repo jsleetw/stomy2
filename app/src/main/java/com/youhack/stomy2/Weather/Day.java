@@ -1,5 +1,9 @@
 package com.youhack.stomy2.weather;
 
+import java.text.SimpleDateFormat;
+import java.util.TimeZone;
+import java.util.Date;
+
 /**
  * Created by jslee on 15/10/5.
  */
@@ -26,8 +30,8 @@ public class Day {
         mSummary = summary;
     }
 
-    public double getTemperatureMax() {
-        return mTemperatureMax;
+    public int getTemperatureMax() {
+        return (int) Math.round(mTemperatureMax);
     }
 
     public void setTemperatureMax(double temperatureMax) {
@@ -48,5 +52,16 @@ public class Day {
 
     public void setTimezone(String timezone) {
         mTimezone = timezone;
+    }
+
+    public int getIconId() {
+        return Forecast.getIconId(mIcon);
+    }
+
+    public String getDayOfTheWeek() {
+        SimpleDateFormat formatter = new SimpleDateFormat("EEEE");
+        formatter.setTimeZone(TimeZone.getTimeZone(mTimezone));
+        Date datetime = new Date(mTime * 1000);
+        return formatter.format(datetime);
     }
 }
