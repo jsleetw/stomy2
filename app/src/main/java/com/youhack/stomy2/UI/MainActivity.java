@@ -39,9 +39,10 @@ import butterknife.OnClick;
 
 
 public class MainActivity extends ActionBarActivity {
-    private String TAG = MainActivity.class.getSimpleName();
-    private Forecast mForecast;
+    public static final String TAG = MainActivity.class.getSimpleName();
+    public static final String DAILY_FORECAST = "DAILY_FORECAST";
 
+    private Forecast mForecast;
 
     private LocationManager mLocationManager;
     private Location mlastLocation;
@@ -173,7 +174,7 @@ public class MainActivity extends ActionBarActivity {
     private void updateDisplay() {
         Current current = mForecast.getCurrent();
         double tempF = (double) current.getTemperature();
-        int tempC = (int) ((tempF-32)*5/9);
+        int tempC = tempFtoTempC(tempF);
 
         mTemperatureLabel.setText(tempC + "");
         mTimeLabel.setText("At " + current.getFormattedTime() + " it will be");
@@ -186,6 +187,10 @@ public class MainActivity extends ActionBarActivity {
         //mIconImageView.setImageResource(mCurrentWeather.getIconId());
 
         mlocationLabel.setText(current.getTimeZone());
+    }
+
+    private int tempFtoTempC(double tempF) {
+        return (int) ((tempF-32)*5/9);
     }
 
     private Forecast parseForecastDetails(String jsonData) throws JSONException {
@@ -214,7 +219,7 @@ public class MainActivity extends ActionBarActivity {
             day.setTimezone(timezone);
             day.setTime(jsonDay.getLong("time"));
             day.setIcon(jsonDay.getString("icon"));
-            day.setTemperatureMax(jsonDay.getDouble("temperatureMax"));
+            day.setTemperatureMax(tempFtoTempC(jsonDay.getDouble("temperatureMax")));
 
             days[i] = day;
         }
@@ -287,6 +292,7 @@ public class MainActivity extends ActionBarActivity {
     @OnClick (R.id.dailyButton)
     public void startDailyActivity(View view) {
         Intent intent = new Intent(this, DailyForecastActive.class);
+        intent.putExtra(DAILY_FORECAST, mForecast.getDailyForcast());
         startActivity(intent);
     }
 }
