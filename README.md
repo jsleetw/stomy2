@@ -3,4 +3,5 @@ Android Weather App development practice
 
 Preview:
 
-![screen shot1] (http://imgur.com/7Km2X6c.jpg "screen shot1")
+![screen shot1] (https://raw.githubusercontent.com/jsleetw/stomy2/master/screenshot/stomy2-1.png "screen shot1")
+![screen shot2] (https://raw.githubusercontent.com/jsleetw/stomy2/master/screenshot/stomy2-2.png "screen shot2")
